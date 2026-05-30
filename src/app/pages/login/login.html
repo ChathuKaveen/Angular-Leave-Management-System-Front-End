@@ -1,0 +1,51 @@
+<div class="form_body">
+    <div class="forms-section">
+        <h1 class="section-title">Login & Signup Forms</h1>
+        <div class="forms">
+          <div class="form-wrapper" [class.is-active]="activeForm === 'login'">
+            <button type="button" class="switcher switcher-login" (click)="switchForm('login')">
+              Login
+              <span class="underline"></span>
+            </button>
+            <form class="form form-login" (ngSubmit)="onLogin()">
+              <fieldset>
+                <legend>Please, enter your email and password for login.</legend>
+                <div class="input-block">
+                  <label for="login-email">E-mail</label>
+                  <input id="login-email" type="email" name="email" [(ngModel)] = "loginObj.email" required>
+                </div>
+                <div class="input-block">
+                  <label for="login-password">Password</label>
+                  <input id="login-password" type="password" name="password" [(ngModel)]="loginObj.password" required>
+                </div>
+              </fieldset>
+              <button  class="btn-login" type="submit">Login</button>
+            </form>
+          </div>
+          <div class="form-wrapper" [class.is-active]="activeForm === 'register'">
+            <button type="button" class="switcher switcher-signup" (click)="switchForm('register')">
+              Sign Up
+              <span class="underline"></span>
+            </button>
+            <form class="form form-signup" (ngSubmit)="onSignup()">
+              <fieldset>
+                <legend>Please, enter your email, password and password confirmation for sign up.</legend>
+                <div class="input-block">
+                  <label for="signup-username">Username</label>
+                  <input id="signup-name" type="text" name="signup-name" required [(ngModel)] = "signupObj.name">
+                </div>
+                <div class="input-block">
+                  <label for="signup-email">E-mail</label>
+                  <input id="signup-email" type="email" name="signup-email" required required [(ngModel)] = "signupObj.email">
+                </div>
+                <div class="input-block">
+                  <label for="signup-password">Password</label>
+                  <input id="signup-password" name="signup-password" type="password" required [(ngModel)] = "signupObj.password">
+                </div>
+              </fieldset>
+              <button type="submit" class="btn-signup" >Sign Up</button>
+            </form>
+          </div>
+        </div>
+    </div>
+</div>

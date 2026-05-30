@@ -1,0 +1,100 @@
+<div class="nav_body">
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="brand">WIDYA</div>
+      <div class="sub">Leave Management</div>
+    </div>
+    <div class="sidebar-role">
+      <div class="role-avatar">SA</div>
+      <div class="role-info">
+        <div class="name">Sara Abeysekara</div>
+        <div class="role" id="current-role-label">Employee</div>
+      </div>
+    </div>
+    <div class="role-switcher">
+      <button class="role-btn active" onclick="switchRole('employee', this)">Emp</button>
+      <button class="role-btn" onclick="switchRole('supervisor', this)">Sup</button>
+      <button class="role-btn" onclick="switchRole('admin', this)">Admin</button>
+    </div>
+    <div class="nav-section">
+  
+      <!-- Employee nav -->
+      <div id="nav-employee">
+        <div class="nav-label">Employee</div>
+        <div class="nav-item active" routerLink="/dashboard" routerLinkActive="active">
+          <span class="icon">🏠</span> Dashboard
+        </div>
+        <div class="nav-item" routerLink="/apply_leave" routerLinkActive="active">
+          <span class="icon">✏️</span> Apply for Leave
+        </div>
+        <div class="nav-item" routerLink="/my_leave_history" routerLinkActive="active">
+          <span class="icon">📋</span> My Leave History
+        </div>
+        <div class="nav-item" onclick="goTo('calendar', this)">
+          <span class="icon">📅</span> Leave Calendar
+        </div>
+      </div>
+  
+      <!-- Supervisor nav (hidden by default) -->
+      <div id="nav-supervisor" style="display:none;">
+        <div class="nav-label">Supervisor</div>
+        <div class="nav-item" onclick="goTo('pending-requests', this)">
+          <span class="icon">⏳</span> Pending Requests
+          <span class="nav-badge">3</span>
+        </div>
+        <div class="nav-item" onclick="goTo('team-leaves', this)">
+          <span class="icon">👥</span> Team Leave History
+        </div>
+        <div class="nav-item" onclick="goTo('calendar', this)">
+          <span class="icon">📅</span> Leave Calendar
+        </div>
+      </div>
+  
+      <!-- Admin nav (hidden by default) -->
+      <div id="nav-admin" style="display:none;">
+        <div class="nav-label">Admin</div>
+        <div class="nav-item" onclick="goTo('admin-dashboard', this)">
+          <span class="icon">📊</span> Overview
+        </div>
+        <div class="nav-item" onclick="goTo('all-requests', this)">
+          <span class="icon">📂</span> All Requests
+        </div>
+        <div class="nav-item" onclick="goTo('leave-types', this)">
+          <span class="icon">🏷️</span> Manage Leave Types
+        </div>
+        <div class="nav-item" onclick="goTo('holidays', this)">
+          <span class="icon">🌏</span> Manage Holidays
+        </div>
+        <div class="nav-item" onclick="goTo('users', this)">
+          <span class="icon">🧑‍💼</span> Manage Users
+        </div>
+        <div class="nav-item" onclick="goTo('calendar', this)">
+          <span class="icon">📅</span> Leave Calendar
+        </div>
+      </div>
+  
+    </div>
+  </aside>
+  
+  <div class="main_container">
+    <header class="topbar">
+      <div class="topbar-title" id="page-title">Dashboard</div>
+      <div class="topbar-actions">
+        <div class="search-bar">
+          <span>🔍</span>
+          <input type="text" placeholder="Search..." />
+        </div>
+        <div class="notif-btn">🔔<span class="notif-dot"></span></div>
+        <button class="btn btn-outline" (click)="logout()">Logout</button>
+        <div class="role-avatar" style="width:36px;height:36px;font-size:12px;">SA</div>
+      </div>
+    </header>
+    <div class="content_container">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+  
+</div>
+
+

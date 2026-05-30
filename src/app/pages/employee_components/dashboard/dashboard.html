@@ -1,0 +1,147 @@
+
+<div class="dashboard_container">
+    <!-- ══════════════════════════════════
+         PAGE: Employee Dashboard
+    ══════════════════════════════════ -->
+    <div class="page" id="page-dashboard">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Annual Leave Remaining</div>
+            <div class="stat-value">12</div>
+            <div class="progress-bar"><div class="progress-fill fill-green" style="width:80%"></div></div>
+            <span class="stat-pill pill-green">of 15 days</span>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Medical Leave Remaining</div>
+            <div class="stat-value">7</div>
+            <div class="progress-bar"><div class="progress-fill fill-orange" style="width:70%"></div></div>
+            <span class="stat-pill pill-orange">of 10 days</span>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Casual Leave Remaining</div>
+            <div class="stat-value">3</div>
+            <div class="progress-bar"><div class="progress-fill fill-yellow" style="width:50%"></div></div>
+            <span class="stat-pill pill-yellow">of 6 days</span>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Pending Requests</div>
+            <div class="stat-value">2</div>
+            <span class="stat-pill pill-blue">Awaiting approval</span>
+          </div>
+        </div>
+  
+        <div class="two-col" style="margin-bottom:20px;">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Recent Leave Requests</div>
+              <button class="btn btn-sm btn-outline" onclick="goTo('apply-leave', null)">+ New Request</button>
+            </div>
+            <div class="card-body" style="padding:0;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Date</th>
+                    <th>Days</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Annual Leave</strong></td>
+                    <td>Apr 20–21</td>
+                    <td>2</td>
+                    <td><span class="status-badge badge-pending">Pending</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Medical Leave</strong></td>
+                    <td>Mar 15</td>
+                    <td>1</td>
+                    <td><span class="status-badge badge-approved">Approved</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Casual Leave</strong></td>
+                    <td>Mar 02–03</td>
+                    <td>2</td>
+                    <td><span class="status-badge badge-approved">Approved</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Annual Leave</strong></td>
+                    <td>Feb 10</td>
+                    <td>1</td>
+                    <td><span class="status-badge badge-rejected">Rejected</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+  
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Recent Activity</div>
+            </div>
+            <div class="card-body">
+              <div class="timeline">
+                <div class="tl-item">
+                  <div class="tl-dot tl-dot-yellow"></div>
+                  <div class="tl-time">Today, 09:30 AM</div>
+                  <div class="tl-text">Leave request submitted</div>
+                  <div class="tl-sub">Annual Leave · Apr 20–21</div>
+                </div>
+                <div class="tl-item">
+                  <div class="tl-dot tl-dot-green"></div>
+                  <div class="tl-time">Mar 16, 11:15 AM</div>
+                  <div class="tl-text">Leave approved by M. Perera</div>
+                  <div class="tl-sub">Medical Leave · Mar 15</div>
+                </div>
+                <div class="tl-item">
+                  <div class="tl-dot tl-dot-green"></div>
+                  <div class="tl-time">Mar 01, 03:00 PM</div>
+                  <div class="tl-text">Leave approved by M. Perera</div>
+                  <div class="tl-sub">Casual Leave · Mar 02–03</div>
+                </div>
+                <div class="tl-item">
+                  <div class="tl-dot tl-dot-red"></div>
+                  <div class="tl-time">Feb 09, 10:45 AM</div>
+                  <div class="tl-text">Leave rejected</div>
+                  <div class="tl-sub">Annual Leave · Feb 10</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Upcoming holidays -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Upcoming Holidays</div>
+            <button class="btn btn-sm btn-outline" onclick="goTo('calendar', null)">View Calendar</button>
+          </div>
+          <div class="card-body">
+            <div class="three-col">
+              <div class="holiday-item" style="border:1px solid var(--border); border-radius:8px; padding:12px; border-bottom:none;">
+                <div class="holiday-date-box"><div class="day">22</div><div class="mon">Apr</div></div>
+                <div>
+                  <div style="font-weight:600;font-size:13px;">Sinhala & Tamil New Year</div>
+                  <div class="text-muted">🇱🇰 Sri Lanka · Public Holiday</div>
+                </div>
+              </div>
+              <div class="holiday-item" style="border:1px solid var(--border); border-radius:8px; padding:12px; border-bottom:none;">
+                <div class="holiday-date-box"><div class="day">01</div><div class="mon">May</div></div>
+                <div>
+                  <div style="font-weight:600;font-size:13px;">Labour Day</div>
+                  <div class="text-muted">🌏 WIDYA-Wide · Public Holiday</div>
+                </div>
+              </div>
+              <div class="holiday-item" style="border:1px solid var(--border); border-radius:8px; padding:12px; border-bottom:none;">
+                <div class="holiday-date-box"><div class="day">09</div><div class="mon">Aug</div></div>
+                <div>
+                  <div style="font-weight:600;font-size:13px;">National Day</div>
+                  <div class="text-muted">🇸🇬 Singapore · Public Holiday</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>

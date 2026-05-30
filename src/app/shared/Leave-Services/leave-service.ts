@@ -1,0 +1,26 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { catchError, throwError } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class LeaveService {
+  urlBase = "http://localhost:8080/leave";
+  constructor(private http:HttpClient){}
+  
+  addLeave(obj:any){
+    return this.http.post(`${this.urlBase}` , obj);
+  }
+
+  getLeaves(){
+      return this.http.get(`${this.urlBase}`).pipe(catchError(err=>{
+        return throwError(()=>err);
+      }));
+  }
+
+  updateLeaves(obj:any , id:number){
+    console.log(obj)
+    return this.http.patch(`${this.urlBase}/${id}` , obj);
+  }
+}

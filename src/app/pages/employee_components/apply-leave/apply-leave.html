@@ -1,0 +1,303 @@
+<div class="apply_container">
+  
+    <div class="page" id="page-apply-leave">
+        <div class="alert alert-info">📌 Your leave request will be sent to your supervisor <strong>M. Perera</strong> for approval.</div>
+        <div class="two-col">
+            <div class="card">
+                <div class="card-header">
+                <div class="card-title">New Leave Application</div>
+                </div>
+
+                <div class="card-body">
+                    <form [formGroup] = "form" (ngSubmit)="onSubmit()">
+                        <div class="form-group">
+                            <label class="form-label">Leave Type <span class="form-required">*</span></label>
+                                @if (leaveTypes$ | async; as types) {
+                                    <select class="form-control"  formControlName="leaveType" [class.is-invalid]="form.get('leaveType')?.touched && form.get('leaveType')?.invalid"> <!---onchange="checkLeaveType(this)"-->                                      <option value="">Select leave type...</option>
+                                      @for(item of types; track item.id) {
+                                        <option [value]="item.id">{{item.type}}</option>
+                                      }
+                                    </select>
+                                  } @else {
+                                    <select class="form-control" disabled>
+                                      <option>Loading leave types...</option>
+                                    </select>
+                                } 
+                            @if(form.get('leaveType')?.touched && form.get('leaveType')?.errors?.['required']){
+                                <div class="error">Please Select Leave Type</div>
+                            }
+                        </div>
+        
+                        <div class="form-group">
+                            <label class="form-label">Leave Duration <span class="form-required">*</span></label>
+                            <div class="radio-group" id="duration-type">
+                            <label class="radio-opt selected" [class.selected] = "leave_type == 'single'" (click)="selectDuration('single')">
+                                <input type="radio" name="duration" value="single" checked/>
+                                📅 Single Day
+                            </label>
+                            <label class="radio-opt" [class.selected] = "leave_type == 'multi'" (click)="selectDuration('multi')">
+                                <input type="radio" name="duration" value="multi"/>
+                                🗓 Multiple Days
+                            </label>
+                            </div>
+                        </div>
+        
+                        <!-- Single day -->
+                        <div id="single-day-fields" [hidden]="leave_type !== 'single'">
+                            <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Date <span class="form-required">*</span></label>
+                                <input type="date" class="form-control" placeholder="2026-04-20" formControlName="single_date" [class.is-invalid]="form.get('single_date')?.touched && form.get('single_date')?.invalid"/>
+                                @if(form.get('single_date')?.errors?.['pastDate']){
+                                    <div class="error">Cannot select past date</div>                                    
+                                }
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Day Type <span class="form-required">*</span></label>
+                                    @if (leaveDayTypes$ | async; as types) {
+                                        <select class="form-control" formControlName="single_date_type" [class.is-invalid]="form.get('single_date_type')?.touched && form.get('single_date_type')?.invalid">
+                                            <option value="">Select leave type...</option>
+                                          @for(item of types; track item.id) {
+                                            @if(item.type == "FULL_DAY"){
+                                                <option [value]="item.id">Full Day</option>
+                                            }@else if (item.type == "HALF_DAY_MORNING") {
+                                                <option [value]="item.id">Half Day Morning</option>
+                                            }@else if (item.type == "HALF_DAY_EVENING") {
+                                                <option [value]="item.id">Half Day Evening</option>
+                                            }
+                                          }
+                                        </select>
+                                      } @else {
+                                        <select class="form-control" disabled>
+                                          <option>Loading leave types...</option>
+                                        </select>
+                                    } 
+                                                                       
+                                @if(form.get('single_date_type')?.touched && form.get('single_date_type')?.errors?.['required']){
+                                    <div class="error">Please Select Leave Day Type</div>
+                                }
+                            </div>
+                            </div>
+                        </div>
+        
+                        <!-- Multiple days (hidden) -->
+                        <div id="multi-day-fields" [hidden]="leave_type !== 'multi'">
+                            <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Start Date <span class="form-required">*</span></label>
+                                <input type="date" class="form-control" value="2026-04-20" formControlName="multi_day_start_date" [class.is-invalid]="form.get('multi_day_start_date')?.touched && form.get('multi_day_start_date')?.invalid"/>
+                                @if(form.get('multi_day_start_date')?.touched && form.get('multi_day_start_date')?.errors?.['required']){
+                                    <div class="error">Please Select Leave Type</div>
+                                }
+                                @if(form.get('multi_day_start_date')?.touched && form.errors?.['invalidRange']){
+                                    <div class="error">Please Select Correct date values</div>
+                                }
+                                @if(form.get('multi_day_start_date')?.errors?.['pastDate']){
+                                    <div class="error">Please Select Future date values</div>
+                                }
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">End Date <span class="form-required">*</span></label>
+                                <input type="date" class="form-control" value="2026-04-21" formControlName="multi_day_end_date" [class.is-invalid]="form.get('multi_day_end_date')?.touched && form.get('multi_day_end_date')?.invalid"/>
+                                @if(form.get('multi_day_end_date')?.touched && form.get('multi_day_end_date')?.errors?.['required']){
+                                    <div class="error">Please Select Leave Type</div>
+                                }
+                                @if(form.get('multi_day_end_date')?.touched && form.errors?.['invalidRange']){
+                                    <div class="error">Please Select Correct date values</div>
+                                }
+                                @if(form.get('multi_day_end_date')?.errors?.['pastDate']){
+                                    <div class="error">Please Select Future date values</div>
+                                }
+                            </div>
+                            </div>
+                            <div class="alert alert-warning">⚠️ You can assign Full/Half day for each day individually in the summary below.</div>
+                            <div style="background:var(--bg);border-radius:8px;padding:14px;border:1px solid var(--border);">
+                            <div style="font-size:12px;font-weight:600;color:var(--text-muted);margin-bottom:10px;">DAYS BREAKDOWN</div>
+                            <div class="form-row" style="margin-bottom:10px;">
+                                <div style="font-size:13px;font-weight:600;">Mon, Apr 20</div>
+                                    @if (leaveDayTypes$ | async; as types) {
+                                        <select class="form-control" formControlName="multi_date_start_type" [class.is-invalid]="form.get('multi_date_start_type')?.touched && form.get('multi_date_start_type')?.invalid">
+                                            <option value="">Select leave type...</option>
+                                          @for(item of types; track item.id) {
+                                            @if(item.type == "FULL_DAY"){
+                                                <option [value]="item.id">Full Day</option>
+                                            }@else if (item.type == "HALF_DAY_MORNING") {
+                                                <option [value]="item.id">Half Day Morning</option>
+                                            }@else if (item.type == "HALF_DAY_EVENING") {
+                                                <option [value]="item.id">Half Day Evening</option>
+                                            }
+                                          }
+                                        </select>
+                                      } @else {
+                                        <select class="form-control" disabled>
+                                          <option>Loading leave types...</option>
+                                        </select>
+                                    } 
+                                @if(form.get('multi_date_start_type')?.touched && form.get('multi_date_start_type')?.errors?.['required']){
+                                    <div class="error">Please Select Leave Day Type</div>
+                                }
+                                
+                            </div>
+                            <div class="form-row">
+                                <div style="font-size:13px;font-weight:600;">Tue, Apr 21</div>
+                                    @if (leaveDayTypes$ | async; as types) {
+                                        <select class="form-control" style="font-size:12px;" formControlName="multi_date_end_type" [class.is-invalid]="form.get('multi_date_end_type')?.touched && form.get('multi_date_end_type')?.invalid">
+                                            <option value="">Select leave type...</option>
+                                          @for(item of types; track item.id) {
+                                            @if(item.type == "FULL_DAY"){
+                                                <option [value]="item.id">Full Day</option>
+                                            }@else if (item.type == "HALF_DAY_MORNING") {
+                                                <option [value]="item.id">Half Day Morning</option>
+                                            }@else if (item.type == "HALF_DAY_EVENING") {
+                                                <option [value]="item.id">Half Day Evening</option>
+                                            }
+                                          }
+                                        </select>
+                                      } @else {
+                                        <select class="form-control" disabled>
+                                          <option>Loading leave types...</option>
+                                        </select>
+                                    } 
+                                    @if(form.get('multi_date_end_type')?.touched && form.get('multi_date_end_type')?.errors?.['required']){
+                                        <div class="error">Please Select Leave Day Type</div>
+                                    }
+                            </div>
+                            </div>
+                        </div>
+        
+                        <div class="form-group mt-4">
+                            <label class="form-label">Reason</label>
+                            <textarea class="form-control" placeholder="Briefly describe the reason for your leave..." formControlName="reason"></textarea>
+                            <div class="form-hint">Optional for most leave types</div>
+                        </div>
+        
+                        <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px;">
+                            <!-- <button class="btn btn-outline" (click)="goTo('dashboard', null)">Cancel</button> -->
+                            <button class="btn btn-primary"  [disabled]="form.invalid">Submit Request</button><!--(click)="showToast('✅ Leave request submitted! Your supervisor has been notified.')"  -->
+                        </div>
+                    </form>
+                </div>
+            </div>
+    
+            <!-- Summary panel -->
+            <div>
+                <div class="card mb-4">
+                <div class="card-header"><div class="card-title">Leave Balance Summary</div></div>
+                <div class="card-body">
+                    {{leave_total |json}}
+                    <!-- @if (leaves$ | async; as types) {
+                          @for(item of types; track item.id) {
+                            {{item | json}}
+                            <div style="margin-bottom:14px;">
+                                <div class="flex-between" style="margin-bottom:4px;">
+                                    <span style="font-size:13px;font-weight:600;">{{item.type}}</span>
+                                    <span style="font-size:13px;font-weight:700;color:var(--accent);">count</span>
+                                </div>
+                            </div>
+                          }
+                      } @else {
+                          <option>Loading leave types...</option>
+                    }  -->
+
+                    <!-- <option value="">
+                        {{ leaveTypes.length ? 'Select leave type...' : 'Loading...' }}
+                    </option>
+                    @for(item of leaveTypes; track item.id){
+                        <div style="margin-bottom:14px;">
+                            <div class="flex-between" style="margin-bottom:4px;">
+                                <span style="font-size:13px;font-weight:600;">{{item.type}}</span>
+                                <span style="font-size:13px;font-weight:700;color:var(--accent);">count / 15</span>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill fill-green" style="width:80%"></div>
+                            </div>
+                        </div> -->
+                        <!-- @if(item.type == 'Annual'){
+                            <div style="margin-bottom:14px;">
+                                <div class="flex-between" style="margin-bottom:4px;">
+                                    <span style="font-size:13px;font-weight:600;">🌴 Annual Leave</span>
+                                    <span style="font-size:13px;font-weight:700;color:var(--accent);">count / 15</span>
+                                </div>
+                                <div class="progress-bar"><div class="progress-fill fill-green" style="width:80%"></div>
+                                </div>
+                            </div>
+                        }
+                        @if(item.type == 'Casual'){
+                            <div style="margin-bottom:14px;">
+                                <div class="flex-between" style="margin-bottom:4px;">
+                                    <span style="font-size:13px;font-weight:600;">☕ Casual Leave</span>
+                                    <span style="font-size:13px;font-weight:700;color:#8a6d00;">3 / 6</span>
+                                </div>
+                                <div class="progress-bar"><div class="progress-fill fill-yellow" style="width:50%"></div></div>
+                            </div>
+                        }
+
+                        @if(item.type == 'Medical'){
+                            <div style="margin-bottom:14px;">
+                                <div class="flex-between" style="margin-bottom:4px;">
+                                  <span style="font-size:13px;font-weight:600;">🏥 Medical Leave</span>
+                                  <span style="font-size:13px;font-weight:700;color:var(--accent2);">7 / 10</span>
+                                </div>
+                                <div class="progress-bar">
+                                  <div class="progress-fill fill-orange" style="width:70%"></div>
+                                </div>
+                              </div>
+                        } 
+                        
+                    }-->
+                    <!-- <div style="margin-bottom:14px;">
+                        <div class="flex-between" style="margin-bottom:4px;">
+                            <span style="font-size:13px;font-weight:600;">🌴 Annual Leave</span>
+                            <span style="font-size:13px;font-weight:700;color:var(--accent);">12 / 15</span>
+                        </div>
+                        <div class="progress-bar"><div class="progress-fill fill-green" style="width:80%"></div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom:14px;">
+                        <div class="flex-between" style="margin-bottom:4px;">
+                            <span style="font-size:13px;font-weight:600;">🏥 Medical Leave</span>
+                            <span style="font-size:13px;font-weight:700;color:var(--accent2);">7 / 10</span>
+                        </div>
+                        <div class="progress-bar"><div class="progress-fill fill-orange" style="width:70%"></div></div>
+                        </div>
+                    <div>
+
+                    <div style="margin-bottom:14px;">
+                        <div class="flex-between" style="margin-bottom:4px;">
+                            <span style="font-size:13px;font-weight:600;">☕ Casual Leave</span>
+                            <span style="font-size:13px;font-weight:700;color:#8a6d00;">3 / 6</span>
+                        </div>
+                        <div class="progress-bar"><div class="progress-fill fill-yellow" style="width:50%"></div></div>
+                    </div> -->
+
+                </div>
+                </div>
+                </div>
+    
+                <div class="card">
+                <div class="card-header"><div class="card-title">Validation Rules</div></div>
+                <div class="card-body">
+                    <div style="display:flex;flex-direction:column;gap:10px;">
+                    <div class="flex-gap-8"><span>✅</span><span style="font-size:13px;">Cannot select past dates</span></div>
+                    <div class="flex-gap-8"><span>✅</span><span style="font-size:13px;">No overlap with existing leaves</span></div>
+                    <div class="flex-gap-8"><span>✅</span><span style="font-size:13px;">Medical leave requires attachment</span></div>
+                    <div class="flex-gap-8"><span>✅</span><span style="font-size:13px;">Reason is optional unless specified</span></div>
+                    <div class="flex-gap-8"><span>✅</span><span style="font-size:13px;">Notification sent to supervisor + admin</span></div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        <!-- Toast notification -->
+        <div id="toast" style="
+        position:fixed; bottom:28px; right:28px;
+        background:var(--text); color:#fff;
+        padding:14px 20px; border-radius:10px;
+        font-size:13.5px; font-weight:500;
+        box-shadow: var(--shadow-lg);
+        transform:translateY(80px); opacity:0;
+        transition: all 0.3s ease;
+        z-index:999; max-width:320px;
+        "></div>
+  
+</div>

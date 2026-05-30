@@ -1,1 +1,70 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+    --bg: #F5F4F0;
+    --surface: #FFFFFF;
+    --surface2: #EFEFEB;
+    --border: #E0DED8;
+    --text: #1A1917;
+    --text-muted: #7A7872;
+    --accent: #2D6A4F;
+    --accent-light: #D8EDDF;
+    --accent2: #E76F51;
+    --accent2-light: #FDEAE4;
+    --warn: #E9C46A;
+    --warn-light: #FDF5DC;
+    --info: #457B9D;
+    --info-light: #DAE8F0;
+    --danger: #C1121F;
+    --danger-light: #FAD7DA;
+    --sidebar-w: 240px;
+    --radius: 10px;
+    --shadow: 0 2px 12px rgba(26,25,23,0.08);
+    --shadow-lg: 0 8px 32px rgba(26,25,23,0.12);
+  }
+
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 18px;
+    border-radius: 8px;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #245A41; }
+  .btn-danger { background: var(--danger); color: #fff; }
+  .btn-danger:hover { background: #a00f18; }
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-outline:hover { background: var(--bg); }
+  .btn-sm { padding: 6px 12px; font-size: 12px; }
+  .btn-ghost { background: transparent; color: var(--text-muted); border: none; padding: 6px 8px; font-size: 12px; }
+  .btn-ghost:hover { color: var(--text); background: var(--surface2); border-radius: 6px; }
+
+
+  .progress-bar {
+    height: 7px;
+    background: var(--surface2);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+  .progress-fill { height: 100%; border-radius: 10px; transition: width 0.4s; }
+  .fill-green { background: var(--accent); }
+  .fill-orange { background: var(--accent2); }
+  .fill-yellow { background: var(--warn); }
+
+
+
+
+  
