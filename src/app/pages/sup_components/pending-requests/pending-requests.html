@@ -1,0 +1,64 @@
+<div class="pending_request">
+  <div class="page" id="page-pending-requests">
+    <div class="alert alert-info">You have <strong>3 pending requests</strong> awaiting your decision.</div>
+    <div class="card">
+      <div class="card-body" style="padding:0;">
+        <table>
+          <thead>
+            <tr>
+              <th>Employee</th>
+              <th>Leave Type</th>
+              <!-- <th>Applied On</th> -->
+              <th>Date(s)</th>
+              <th>Duration</th>
+              <th>Reason</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (subLeaves$ | async; as types) {
+              
+                @for(item of types; track item.id) {
+                  @if(item.status == "PENDING"){
+                    <tr>
+                      <td>
+                        <div class="flex-gap-8">
+                          <div><div style="font-weight:600;">{{item.userName}}</div></div>
+                        </div>
+                      </td>
+                      <td>🌴 {{item.leaveType}}</td>
+                      <td class="text-muted">{{item.from_date.slice(0,10)}} - {{item.to_date.slice(0,10)}}</td>
+                      <td>{{item.days}} Day(s)</td>
+                      
+                      <td class="text-muted">{{item.reason}}</td>
+                      <td>
+                        <div class="flex-gap-8">
+                          <button class="btn btn-sm btn-primary" (click)="approve(item.id)">Approve</button>
+                          <button class="btn btn-sm" style="background:var(--danger-light);color:var(--danger);" (click)="reject(item.id)">Reject</button>
+                        </div>
+                      </td>
+                    </tr>
+                  }
+                  
+                }
+
+            } @else {
+                <span>Loading leave requests ...</span>
+            }
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div id="toast" style="
+     position:fixed; bottom:28px; right:28px;
+     background:var(--text); color:#fff;
+     padding:14px 20px; border-radius:10px;
+     font-size:13.5px; font-weight:500;
+     box-shadow: var(--shadow-lg);
+     transform:translateY(80px); opacity:0;
+     transition: all 0.3s ease;
+     z-index:999; max-width:320px;
+     "></div>
+</div>

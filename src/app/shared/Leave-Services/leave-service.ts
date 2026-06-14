@@ -23,4 +23,14 @@ export class LeaveService {
     console.log(obj)
     return this.http.patch(`${this.urlBase}/${id}` , obj);
   }
+
+  getLeavesOfSubordinates(){
+    return this.http.get(`${this.urlBase}/subordinate`).pipe(catchError(err=>{
+      return throwError(()=>err);
+    }));
+  }
+
+  approveLeaves(obj:any , id:number){
+    return this.http.patch(`${this.urlBase}/approve/${id}` , obj)
+  }
 }

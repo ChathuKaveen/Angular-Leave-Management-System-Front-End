@@ -1,11 +1,10 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { LeaveService } from '../../../shared/Leave-Services/leave-service';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, switchMap } from 'rxjs';
 import { AsyncPipe, CommonModule, JsonPipe } from '@angular/common';
 import { RouterLinkWithHref } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LeaveDayType } from '../../../shared/Leave-Services/leave-day-type-service';
-import { noPastDate, noPastMultiDates } from '../../../shared/validators/date.validator';
 import { LeaveDayService } from '../../../shared/Leave-Services/leave-type-service';
 import { LeaveObject } from '../../../interfaces/leave-object';
 
@@ -19,9 +18,11 @@ export class MyLeaveHistory {
   leave_type:'single'|'multi' = 'single';
   leaveTypes$!:Observable<any>
   form!: FormGroup
+  toastTimer:any
   formPopulateData: any
   leaveDayTypes$!: Observable<any>
-  leaves$!: Observable<any>
+  private refreshLeaves$ = new BehaviorSubject<void>(undefined);
+  leaves$: Observable<any> = this.refreshLeaves$.pipe(switchMap(()=>this.leaveService.getLeaves()))
   leaveObj :LeaveObject = {
     leaveType: 0,
     from_date: '',
@@ -30,11 +31,14 @@ export class MyLeaveHistory {
     to_date_type: 0,
     reason: ''
   }
+  
+
   constructor(private leaveService:LeaveService , private fb:FormBuilder , private leaveDayType:LeaveDayType , private leaveTypeService:LeaveDayService , private cdr: ChangeDetectorRef){}
 
   getLeaves(){
-    this.leaves$ = this.leaveService.getLeaves()
-    this.cdr.detectChanges();
+    //this.leaves$ = this.leaveService.getLeaves()
+    //this.cdr.detectChanges();
+    this.refreshLeaves$.next();
   }
 
   getLeaveDayTypes(){
@@ -45,16 +49,6 @@ export class MyLeaveHistory {
   }
 
   ngOnInit(){
-    this.form = this.fb.group({
-      id: [null],
-      single_date: [''],
-      single_date_type: [''],
-      multi_day_start_date: [''],
-      multi_day_end_date: [''],
-      multi_date_start_type: [''],
-      multi_date_end_type: [''],
-      reason: ['']
-    });
     this.formBuild()
     this.getLeaveTypes()
     this.getLeaveDayTypes()
@@ -69,8 +63,8 @@ export class MyLeaveHistory {
         duration: ['multi'],
         single_date: [''],
         single_date_type: [''],
-        multi_day_start_date: ['' , [Validators.required]],
-        multi_day_end_date: ['' , [Validators.required]],
+        multi_day_start_date: ['' , Validators.required],
+        multi_day_end_date: ['' , Validators.required],
         multi_date_start_type: ['' , Validators.required],
         multi_date_end_type: ['' ,Validators.required],
         reason: ['']
@@ -143,18 +137,20 @@ export class MyLeaveHistory {
     const startDate = formData.from_date ? formData.from_date.split('T')[0] : '';
     const endDate = formData.to_date ? formData.to_date.split('T')[0] : '';
       
-      if(startDate == endDate){
-        this.leave_type = 'single';
-        this.form.patchValue({
-          leave_id: formData.id,
-          leaveType: formData.leaveTypeId,
-          single_date: startDate,
-          single_date_type: formData.from_date_type_id, 
-          reason: formData.reason
-        });
-      }else{
-        this.leave_type = 'multi';
-        this.form.patchValue({
+    if(startDate == endDate){
+      this.leave_type = 'single';
+      this.formBuild();
+      this.form.patchValue({
+        leave_id: formData.id,
+        leaveType: formData.leaveTypeId,
+        single_date: startDate,
+        single_date_type: formData.from_date_type_id, 
+        reason: formData.reason
+      });
+    }else{
+      this.leave_type = 'multi';
+      this.formBuild();
+      this.form.patchValue({
           leave_id: formData.id,
           leaveType: formData.leaveTypeId,
           multi_day_start_date: startDate,
@@ -162,8 +158,8 @@ export class MyLeaveHistory {
           multi_date_start_type: formData.from_date_type_id, 
           multi_date_end_type: formData.to_date_type_id,     
           reason: formData.reason
-        });
-      }
+      });
+    }
       
   
   }
@@ -176,7 +172,6 @@ export class MyLeaveHistory {
         console.log('Key control: ' + key + ', errors: ', controlErrors);
       }
     });
-      debugger
       this.form.markAllAsTouched()
       return
     }
@@ -197,13 +192,28 @@ export class MyLeaveHistory {
     this.leaveService.updateLeaves(this.leaveObj , leaveId).subscribe({
       next: (res) => {
         this.getLeaves()
-        console.log('Success response received:', res);
-        
+        this.showToast('✅ Leave request updated! Your supervisor has been notified.'); 
       },
       error: (err) => {
+        this.showToast('❌ Error occured '+ err.error.error);
       }
     });
 
   }
 
+  showToast(msg:any) {
+    const t:HTMLElement | null = document.getElementById('toast')
+    if(t != null){
+      t.textContent = msg;
+      t.style.transform = 'translateY(0)';
+      t.style.opacity = '1';
+      clearTimeout(this.toastTimer);
+      this.toastTimer = setTimeout(() => {
+                          t.style.transform = 'translateY(80px)';
+                          t.style.opacity = '0';
+                        }, 3000);
+    }
+    
+  }
+  
 }

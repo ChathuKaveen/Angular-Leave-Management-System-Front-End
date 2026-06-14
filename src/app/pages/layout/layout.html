@@ -1,5 +1,4 @@
 <div class="nav_body">
-
   <aside class="sidebar">
     <div class="sidebar-logo">
       <div class="brand">WIDYA</div>
@@ -13,66 +12,72 @@
       </div>
     </div>
     <div class="role-switcher">
-      <button class="role-btn active" onclick="switchRole('employee', this)">Emp</button>
-      <button class="role-btn" onclick="switchRole('supervisor', this)">Sup</button>
-      <button class="role-btn" onclick="switchRole('admin', this)">Admin</button>
+      <button class="role-btn" [class.active]="currentRole === 'employee'" (click)="switchRole('employee')" >Emp</button>
+      <button class="role-btn" [class.active]="currentRole === 'supervisor'" (click)="switchRole('supervisor')" >Sup</button>
+      <button class="role-btn" [class.active]="currentRole === 'admin'" (click)="switchRole('admin')" >Admin</button>
     </div>
     <div class="nav-section">
-  
-      <!-- Employee nav -->
-      <div id="nav-employee">
-        <div class="nav-label">Employee</div>
-        <div class="nav-item active" routerLink="/dashboard" routerLinkActive="active">
-          <span class="icon">🏠</span> Dashboard
+
+      @if (currentRole === 'employee') {
+        <!-- Employee nav -->
+        <div id="nav-employee">
+          <div class="nav-label">Employee</div>
+          <div class="nav-item active" routerLink="/dashboard" routerLinkActive="active">
+            <span class="icon">🏠</span> Dashboard
+          </div>
+          <div class="nav-item" routerLink="/apply_leave" routerLinkActive="active">
+            <span class="icon">✏️</span> Apply for Leave
+          </div>
+          <div class="nav-item" routerLink="/my_leave_history" routerLinkActive="active">
+            <span class="icon">📋</span> My Leave History
+          </div>
+          <div class="nav-item" onclick="goTo('calendar', this)">
+            <span class="icon">📅</span> Leave Calendar
+          </div>
         </div>
-        <div class="nav-item" routerLink="/apply_leave" routerLinkActive="active">
-          <span class="icon">✏️</span> Apply for Leave
+      }
+      
+      @if (currentRole === 'supervisor') {
+        <!-- Supervisor nav (hidden by default) -->
+        <div id="nav-supervisor" >
+          <div class="nav-label">Supervisor</div>
+          <div class="nav-item" routerLink="/pending_requests" routerLinkActive="active">
+            <span class="icon">⏳</span> Pending Requests
+            <span class="nav-badge">3</span>
+          </div>
+          <div class="nav-item" >
+            <span class="icon">👥</span> Team Leave History
+          </div>
+          <div class="nav-item" >
+            <span class="icon">📅</span> Leave Calendar
+          </div>
         </div>
-        <div class="nav-item" routerLink="/my_leave_history" routerLinkActive="active">
-          <span class="icon">📋</span> My Leave History
+      }
+      
+      @if (currentRole === 'admin') {
+        <!-- Admin nav (hidden by default) -->
+        <div id="nav-admin" style="display:none;">
+          <div class="nav-label">Admin</div>
+          <div class="nav-item" onclick="goTo('admin-dashboard', this)">
+            <span class="icon">📊</span> Overview
+          </div>
+          <div class="nav-item" onclick="goTo('all-requests', this)">
+            <span class="icon">📂</span> All Requests
+          </div>
+          <div class="nav-item" onclick="goTo('leave-types', this)">
+            <span class="icon">🏷️</span> Manage Leave Types
+          </div>
+          <div class="nav-item" onclick="goTo('holidays', this)">
+            <span class="icon">🌏</span> Manage Holidays
+          </div>
+          <div class="nav-item" onclick="goTo('users', this)">
+            <span class="icon">🧑‍💼</span> Manage Users
+          </div>
+          <div class="nav-item" onclick="goTo('calendar', this)">
+            <span class="icon">📅</span> Leave Calendar
+          </div>
         </div>
-        <div class="nav-item" onclick="goTo('calendar', this)">
-          <span class="icon">📅</span> Leave Calendar
-        </div>
-      </div>
-  
-      <!-- Supervisor nav (hidden by default) -->
-      <div id="nav-supervisor" style="display:none;">
-        <div class="nav-label">Supervisor</div>
-        <div class="nav-item" onclick="goTo('pending-requests', this)">
-          <span class="icon">⏳</span> Pending Requests
-          <span class="nav-badge">3</span>
-        </div>
-        <div class="nav-item" onclick="goTo('team-leaves', this)">
-          <span class="icon">👥</span> Team Leave History
-        </div>
-        <div class="nav-item" onclick="goTo('calendar', this)">
-          <span class="icon">📅</span> Leave Calendar
-        </div>
-      </div>
-  
-      <!-- Admin nav (hidden by default) -->
-      <div id="nav-admin" style="display:none;">
-        <div class="nav-label">Admin</div>
-        <div class="nav-item" onclick="goTo('admin-dashboard', this)">
-          <span class="icon">📊</span> Overview
-        </div>
-        <div class="nav-item" onclick="goTo('all-requests', this)">
-          <span class="icon">📂</span> All Requests
-        </div>
-        <div class="nav-item" onclick="goTo('leave-types', this)">
-          <span class="icon">🏷️</span> Manage Leave Types
-        </div>
-        <div class="nav-item" onclick="goTo('holidays', this)">
-          <span class="icon">🌏</span> Manage Holidays
-        </div>
-        <div class="nav-item" onclick="goTo('users', this)">
-          <span class="icon">🧑‍💼</span> Manage Users
-        </div>
-        <div class="nav-item" onclick="goTo('calendar', this)">
-          <span class="icon">📅</span> Leave Calendar
-        </div>
-      </div>
+      }
   
     </div>
   </aside>
