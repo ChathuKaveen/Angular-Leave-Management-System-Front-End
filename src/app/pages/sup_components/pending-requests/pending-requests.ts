@@ -10,18 +10,21 @@ import { AsyncPipe, JsonPipe } from '@angular/common';
   styleUrl: './pending-requests.css',
 })
 export class PendingRequests implements OnInit {
-  private refreshLeaves$ = new BehaviorSubject<void>(undefined);
-  subLeaves$:Observable<any> = this.refreshLeaves$.pipe(switchMap(()=>this.leaveSer.getLeavesOfSubordinates()))
-  pendingCount$:Observable<number> = this.subLeaves$.pipe(
-    map((leaves: any[]) => leaves.filter(l => l.status === 'PENDING').length)
-  );
+  subLeaves$!: Observable<any>;
+  pendingCount$!: Observable<number>;
 
   toastTimer:any
-  constructor(private leaveSer:LeaveService){}
+  constructor(private leaveSer:LeaveService){
+    this.subLeaves$ = this.leaveSer.refreshSubordinates$.pipe(
+      switchMap(() => this.leaveSer.getLeavesOfSubordinates())
+    );
+    this.pendingCount$ = this.subLeaves$.pipe(
+      map((leaves: any[]) => leaves.filter(l => l.status === 'PENDING').length)
+    );
+  }
 
   getLeaveDayTypes(){
-    //this.subLeaves$ = this.leaveSer.getLeavesOfSubordinates()
-    this.refreshLeaves$.next()
+    this.leaveSer.refreshSubordinates$.next();
   }
   
   ngOnInit(): void {

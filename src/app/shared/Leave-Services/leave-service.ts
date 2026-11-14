@@ -1,12 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, tap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LeaveService {
   urlBase = "http://localhost:8080/leave";
+  refreshSubordinates$ = new BehaviorSubject<void>(undefined);
+
   constructor(private http:HttpClient){}
   
   addLeave(obj:any){
@@ -31,6 +33,8 @@ export class LeaveService {
   }
 
   approveLeaves(obj:any , id:number){
-    return this.http.patch(`${this.urlBase}/approve/${id}` , obj)
+    return this.http.patch(`${this.urlBase}/approve/${id}` , obj).pipe(
+      tap(() => this.refreshSubordinates$.next())
+    );
   }
 }

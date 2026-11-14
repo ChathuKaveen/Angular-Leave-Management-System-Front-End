@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RouterOutlet, RouterLinkWithHref, RouterLinkActive, Router } from '@angular/router';
 import { Logout } from '../../shared/logout';
 import { SupervisorService } from '../../shared/Supervisor-Service/supervisor-service';
-import { BehaviorSubject, map, Observable, switchMap } from 'rxjs';
+import { map, Observable, switchMap } from 'rxjs';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 import { AdminService } from '../../shared/Admin-Service/admin-service';
 import { LeaveService } from '../../shared/Leave-Services/leave-service';
@@ -17,15 +17,18 @@ export class Layout implements OnInit{
   currentAdminRole: 'employee' | 'supervisor' | 'admin' = 'employee';
   isSupervisor$!: Observable<boolean>
   isAdmin$!: Observable<boolean>
+  subLeaves$: Observable<any>;
+  pendingCount$: Observable<number>;
+
   constructor(private logoutSer:Logout , private router:Router , private supSer:SupervisorService , private adminSer:AdminService , private leaveSer:LeaveService){
     logoutSer.tokenValidity()
-  }
-
-  private refreshLeaves$ = new BehaviorSubject<void>(undefined);
-    subLeaves$:Observable<any> = this.refreshLeaves$.pipe(switchMap(()=>this.leaveSer.getLeavesOfSubordinates()))
-    pendingCount$:Observable<number> = this.subLeaves$.pipe(
+    this.subLeaves$ = this.leaveSer.refreshSubordinates$.pipe(
+      switchMap(() => this.leaveSer.getLeavesOfSubordinates())
+    );
+    this.pendingCount$ = this.subLeaves$.pipe(
       map((leaves: any[]) => leaves.filter(l => l.status === 'PENDING').length)
     );
+  }
 
   logout() {
     this.logoutSer.logout();
