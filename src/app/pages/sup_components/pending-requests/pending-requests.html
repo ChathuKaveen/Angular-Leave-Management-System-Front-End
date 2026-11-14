@@ -1,6 +1,6 @@
 <div class="pending_request">
   <div class="page" id="page-pending-requests">
-    <div class="alert alert-info">You have <strong>3 pending requests</strong> awaiting your decision.</div>
+    <div class="alert alert-info">You have <strong>{{ pendingCount$ | async }} pending request(s)</strong> awaiting your decision.</div>
     <div class="card">
       <div class="card-body" style="padding:0;">
         <table>

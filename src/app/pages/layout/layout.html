@@ -3,6 +3,7 @@
     <div class="sidebar-logo">
       <div class="brand">WIDYA</div>
       <div class="sub">Leave Management</div>
+      
     </div>
     <div class="sidebar-role">
       <div class="role-avatar">SA</div>
@@ -13,8 +14,12 @@
     </div>
     <div class="role-switcher">
       <button class="role-btn" [class.active]="currentRole === 'employee'" (click)="switchRole('employee')" >Emp</button>
-      <button class="role-btn" [class.active]="currentRole === 'supervisor'" (click)="switchRole('supervisor')" >Sup</button>
-      <button class="role-btn" [class.active]="currentRole === 'admin'" (click)="switchRole('admin')" >Admin</button>
+      @if(isSupervisor$ | async){
+        <button class="role-btn" [class.active]="currentRole === 'supervisor'" (click)="switchRole('supervisor')" >Sup</button>
+      }
+      @if (isAdmin$ |async) {
+        <button class="role-btn" [class.active]="currentRole === 'admin'" (click)="switchRole('admin')" >Admin</button>
+      }
     </div>
     <div class="nav-section">
 
@@ -43,9 +48,9 @@
           <div class="nav-label">Supervisor</div>
           <div class="nav-item" routerLink="/pending_requests" routerLinkActive="active">
             <span class="icon">⏳</span> Pending Requests
-            <span class="nav-badge">3</span>
+            <span class="nav-badge">{{ pendingCount$ | async }}</span>
           </div>
-          <div class="nav-item" >
+          <div class="nav-item" routerLink="/team_leave_history" routerLinkActive="active">
             <span class="icon">👥</span> Team Leave History
           </div>
           <div class="nav-item" >

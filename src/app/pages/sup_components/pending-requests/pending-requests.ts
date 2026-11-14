@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LeaveService } from '../../../shared/Leave-Services/leave-service';
-import { BehaviorSubject, Observable, switchMap } from 'rxjs';
+import { BehaviorSubject, Observable, map, switchMap } from 'rxjs';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 
 @Component({
@@ -12,6 +12,9 @@ import { AsyncPipe, JsonPipe } from '@angular/common';
 export class PendingRequests implements OnInit {
   private refreshLeaves$ = new BehaviorSubject<void>(undefined);
   subLeaves$:Observable<any> = this.refreshLeaves$.pipe(switchMap(()=>this.leaveSer.getLeavesOfSubordinates()))
+  pendingCount$:Observable<number> = this.subLeaves$.pipe(
+    map((leaves: any[]) => leaves.filter(l => l.status === 'PENDING').length)
+  );
 
   toastTimer:any
   constructor(private leaveSer:LeaveService){}
