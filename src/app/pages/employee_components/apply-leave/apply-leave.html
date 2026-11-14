@@ -182,96 +182,43 @@
             <!-- Summary panel -->
             <div>
                 <div class="card mb-4">
-                <div class="card-header"><div class="card-title">Leave Balance Summary</div></div>
-                <div class="card-body">
-                    {{leave_total |json}}
-                    <!-- @if (leaves$ | async; as types) {
-                          @for(item of types; track item.id) {
-                            {{item | json}}
-                            <div style="margin-bottom:14px;">
-                                <div class="flex-between" style="margin-bottom:4px;">
-                                    <span style="font-size:13px;font-weight:600;">{{item.type}}</span>
-                                    <span style="font-size:13px;font-weight:700;color:var(--accent);">count</span>
-                                </div>
-                            </div>
-                          }
-                      } @else {
-                          <option>Loading leave types...</option>
-                    }  -->
+                    <div class="card-header"><div class="card-title">Leave Balance Summary</div></div>
+                    <div class="card-body">
 
-                    <!-- <option value="">
-                        {{ leaveTypes.length ? 'Select leave type...' : 'Loading...' }}
-                    </option>
-                    @for(item of leaveTypes; track item.id){
+                        <!-- Annual Leave -->
                         <div style="margin-bottom:14px;">
                             <div class="flex-between" style="margin-bottom:4px;">
-                                <span style="font-size:13px;font-weight:600;">{{item.type}}</span>
-                                <span style="font-size:13px;font-weight:700;color:var(--accent);">count / 15</span>
+                                <span style="font-size:13px;font-weight:600;">🌴 Annual Leave</span>
+                                <span style="font-size:13px;font-weight:700;color:var(--accent);">{{ getLeaveCount('Annual') }} / 15</span>
                             </div>
-                            <div class="progress-bar"><div class="progress-fill fill-green" style="width:80%"></div>
+                            <div class="progress-bar">
+                                <div class="progress-fill fill-green" [style.width.%]="(getLeaveCount('Annual') / 15) * 100"></div>
                             </div>
-                        </div> -->
-                        <!-- @if(item.type == 'Annual'){
-                            <div style="margin-bottom:14px;">
-                                <div class="flex-between" style="margin-bottom:4px;">
-                                    <span style="font-size:13px;font-weight:600;">🌴 Annual Leave</span>
-                                    <span style="font-size:13px;font-weight:700;color:var(--accent);">count / 15</span>
-                                </div>
-                                <div class="progress-bar"><div class="progress-fill fill-green" style="width:80%"></div>
-                                </div>
-                            </div>
-                        }
-                        @if(item.type == 'Casual'){
-                            <div style="margin-bottom:14px;">
-                                <div class="flex-between" style="margin-bottom:4px;">
-                                    <span style="font-size:13px;font-weight:600;">☕ Casual Leave</span>
-                                    <span style="font-size:13px;font-weight:700;color:#8a6d00;">3 / 6</span>
-                                </div>
-                                <div class="progress-bar"><div class="progress-fill fill-yellow" style="width:50%"></div></div>
-                            </div>
-                        }
+                        </div>
 
-                        @if(item.type == 'Medical'){
-                            <div style="margin-bottom:14px;">
-                                <div class="flex-between" style="margin-bottom:4px;">
-                                  <span style="font-size:13px;font-weight:600;">🏥 Medical Leave</span>
-                                  <span style="font-size:13px;font-weight:700;color:var(--accent2);">7 / 10</span>
-                                </div>
-                                <div class="progress-bar">
-                                  <div class="progress-fill fill-orange" style="width:70%"></div>
-                                </div>
-                              </div>
-                        } 
-                        
-                    }-->
-                    <!-- <div style="margin-bottom:14px;">
-                        <div class="flex-between" style="margin-bottom:4px;">
-                            <span style="font-size:13px;font-weight:600;">🌴 Annual Leave</span>
-                            <span style="font-size:13px;font-weight:700;color:var(--accent);">12 / 15</span>
+                        <!-- Medical Leave -->
+                        <div style="margin-bottom:14px;">
+                            <div class="flex-between" style="margin-bottom:4px;">
+                                <span style="font-size:13px;font-weight:600;">🏥 Medical Leave</span>
+                                <span style="font-size:13px;font-weight:700;color:var(--accent2);">{{ getLeaveCount('Medical') }} / 10</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill fill-orange" [style.width.%]="(getLeaveCount('Medical') / 10) * 100"></div>
+                            </div>
                         </div>
-                        <div class="progress-bar"><div class="progress-fill fill-green" style="width:80%"></div>
+
+                        <!-- Casual Leave -->
+                        <div style="margin-bottom:14px;">
+                            <div class="flex-between" style="margin-bottom:4px;">
+                                <span style="font-size:13px;font-weight:600;">☕ Casual Leave</span>
+                                <span style="font-size:13px;font-weight:700;color:#8a6d00;">{{ getLeaveCount('Casual') }} / 6</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill fill-yellow" [style.width.%]="(getLeaveCount('Casual') / 6) * 100"></div>
+                            </div>
                         </div>
+
                     </div>
-
-                    <div style="margin-bottom:14px;">
-                        <div class="flex-between" style="margin-bottom:4px;">
-                            <span style="font-size:13px;font-weight:600;">🏥 Medical Leave</span>
-                            <span style="font-size:13px;font-weight:700;color:var(--accent2);">7 / 10</span>
-                        </div>
-                        <div class="progress-bar"><div class="progress-fill fill-orange" style="width:70%"></div></div>
-                        </div>
-                    <div>
-
-                    <div style="margin-bottom:14px;">
-                        <div class="flex-between" style="margin-bottom:4px;">
-                            <span style="font-size:13px;font-weight:600;">☕ Casual Leave</span>
-                            <span style="font-size:13px;font-weight:700;color:#8a6d00;">3 / 6</span>
-                        </div>
-                        <div class="progress-bar"><div class="progress-fill fill-yellow" style="width:50%"></div></div>
-                    </div> -->
-
-                </div>
-                </div>
                 </div>
     
                 <div class="card">

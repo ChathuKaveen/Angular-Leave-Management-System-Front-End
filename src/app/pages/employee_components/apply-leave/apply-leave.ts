@@ -5,12 +5,12 @@ import { noPastDate , noPastMultiDates } from '../../../shared/validators/date.v
 import { LeaveObject } from '../../../interfaces/leave-object';
 import { LeaveDayService } from '../../../shared/Leave-Services/leave-type-service';
 import { LeaveDayType } from '../../../shared/Leave-Services/leave-day-type-service';
-import { AsyncPipe, JsonPipe } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { map, Observable, tap } from 'rxjs';
 
 @Component({
   selector: 'app-apply-leave',
-  imports: [ReactiveFormsModule ,AsyncPipe , JsonPipe],
+  imports: [ReactiveFormsModule ,AsyncPipe],
   templateUrl: './apply-leave.html',
   styleUrl: './apply-leave.css',
 })
@@ -79,6 +79,13 @@ export class ApplyLeave implements OnInit{
     })
   }
 
+  getLeaveCount(type: string): number {
+    const key = Object.keys(this.leave_total).find(k =>
+      k.toLowerCase().includes(type.toLowerCase())
+    );
+    return key ? this.leave_total[key] : 0;
+  }
+
   getLeaveTypes(){
     this.leaveTypes$ = this.leaveTypeService.getLeaveTypes()
   }
@@ -113,6 +120,7 @@ export class ApplyLeave implements OnInit{
     this.leaveService.addLeave(this.leaveObj).subscribe({
       next: (res) => {
         console.log(res);
+        this.getLeaves();
         this.showToast('✅ Leave request submitted! Your supervisor has been notified.');
       },
       error: (err) => {
